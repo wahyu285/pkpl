@@ -8,18 +8,38 @@
     <link rel="stylesheet" href="{% static 'bootstrap/css/bootstrap.min.css' %}">
     <link rel="stylesheet" href="{% static 'bootstrap-icons/font/bootstrap-icons.css' %}">
     <style>
-        html, body {
-            height: 100%;
+        html, body { height: 100%; }
+        body { display: flex; flex-direction: column; min-height: 100vh; }
+        .content { flex: 1; }
+        .section-title {
+            margin-top: 20px;
+            margin-bottom: 10px;
+            border-bottom: 1px solid #dee2e6;
+            padding-bottom: 5px;
         }
-        body {
-            display: flex;
-            flex-direction: column;
-            min-height: 100vh;
+        .step { margin-bottom: 8px; }
+        .step i { color: #0d6efd; margin-right: 6px; }
+        /* Navbar hover effect */
+        .navbar-nav .nav-link {
+            position: relative;
+            transition: color 0.3s ease;
         }
-        .content {
-            flex: 1;
+        .navbar-nav .nav-link::after {
+            content: "";
+            position: absolute;
+            width: 0;
+            height: 2px;
+            bottom: -4px;
+            left: 0;
+            background-color: #f8f9fa;
+            transition: width 0.3s ease;
         }
-        
+        .navbar-nav .nav-link:hover {
+            color: #ffc107 !important;
+        }
+        .navbar-nav .nav-link:hover::after {
+            width: 100%;
+        }
     </style>
     <script>
         function confirmLogout(event) {
@@ -31,6 +51,7 @@
     </script>
 </head>
 <body>
+    <!-- Navbar -->
     <nav class="navbar navbar-expand-lg navbar-dark bg-dark py-3">
         <div class="container-fluid">
             <a class="navbar-brand d-flex align-items-center" href="#">
@@ -49,7 +70,13 @@
                         <a class="nav-link" href="{% url 'profil_admin' %}"><i class="bi bi-person-circle"></i> Profil</a>
                     </li>
                     <li class="nav-item me-4">
-                        <a class="nav-link" href="{% url 'admin_daftar_dokumen' %}"><i class="bi bi-person-circle"></i> Dokumen</a>
+                        <a class="nav-link" href="{% url 'admin_daftar_dokumen' %}"><i class="bi bi-file-earmark-text"></i> Dokumen</a>
+                    </li>
+                    <!-- Tombol Tata Cara Modal -->
+                    <li class="nav-item me-4">
+                        <a class="nav-link" href="#" data-bs-toggle="modal" data-bs-target="#tataCaraModal">
+                            <i class="bi bi-journal-text"></i> Tata Cara
+                        </a>
                     </li>
                     <li class="nav-item">
                         <a class="nav-link text-danger" href="{% url 'logout' %}" onclick="confirmLogout(event)">
@@ -60,7 +87,8 @@
             </div>
         </div>
     </nav>
-    
+
+    <!-- Konten -->
     <div class="container mt-5 content">
         <h2 class="text-center mb-4">Dashboard Admin</h2>
         
@@ -140,8 +168,8 @@
                     {% endif %}
                 </ul>
             </nav>            
-            
         </div>
+
         <!-- Toast Container -->
         <div class="toast-container position-fixed top-0 end-0 p-3">
             {% if dokumen_belum_diunggah %}
@@ -170,22 +198,53 @@
             {% endif %}
         </div>
     </div>
-    
+
+    <!-- Modal Tata Cara -->
+    <div class="modal fade" id="tataCaraModal" tabindex="-1" aria-labelledby="tataCaraLabel" aria-hidden="true">
+        <div class="modal-dialog modal-lg modal-dialog-centered modal-dialog-scrollable">
+            <div class="modal-content">
+                <div class="modal-header bg-dark text-white">
+                    <h5 class="modal-title" id="tataCaraLabel"><i class="bi bi-journal-text"></i> Panduan Tata Cara Admin</h5>
+                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <!-- Manajemen Akun -->
+                    <h6 class="section-title">1. Manajemen Akun</h6>
+                    <div class="step"><i class="bi bi-check-circle"></i> Lihat daftar akun di menu <strong>Akun</strong>.</div>
+                    <div class="step"><i class="bi bi-check-circle"></i> Tambah akun baru dengan klik <strong>Buat Akun Baru</strong>.</div>
+                    <div class="step"><i class="bi bi-check-circle"></i> Edit akun dengan tombol <strong>Edit</strong>.</div>
+                    <div class="step"><i class="bi bi-check-circle"></i> Hapus akun dengan tombol <strong>Hapus</strong> lalu konfirmasi.</div>
+
+                    <!-- Manajemen Dokumen -->
+                    <h6 class="section-title">2. Manajemen Dokumen</h6>
+                    <div class="step"><i class="bi bi-check-circle"></i> Masuk ke menu <strong>Dokumen</strong>.</div>
+                    <div class="step"><i class="bi bi-check-circle"></i> Admin dapat melihat <strong>daftar seluruh dokumen dari semua pengguna</strong>.</div>
+                    <div class="step"><i class="bi bi-check-circle"></i> Cek <strong>status laporan</strong> (sudah diunggah / belum diunggah).</div>
+                    <div class="step"><i class="bi bi-check-circle"></i> Periksa <strong>batas waktu unggah laporan</strong> yang tertera di daftar.</div>
+                    <div class="step"><i class="bi bi-check-circle"></i> Klik <strong>Detail</strong> untuk melihat informasi lengkap dokumen.</div>
+                    <div class="step"><i class="bi bi-check-circle"></i> Gunakan tombol <strong>Unduh Surat</strong> atau <strong>Unduh Laporan</strong> untuk mengakses file.</div>
+                    <div class="step"><i class="bi bi-check-circle"></i> Hapus dokumen/laporan dengan tombol <strong>Hapus</strong> bila diperlukan.</div>
+                    <div class="step"><i class="bi bi-check-circle"></i> Gunakan <strong>fitur Pencarian (Search)</strong> untuk menemukan dokumen berdasarkan nomor surat, nama tim, atau irban.</div>
+
+                    <!-- Logout -->
+                    <h6 class="section-title">3. Logout</h6>
+                    <div class="step"><i class="bi bi-check-circle"></i> Klik tombol <strong>Logout</strong> di navbar untuk keluar.</div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
+                        <i class="bi bi-x-circle"></i> Tutup
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Footer -->
     <footer class="bg-dark text-white text-center py-3 mt-auto">
         <p class="mb-0">&copy; 2025 Inspektorat Provinsi Sultra. All Rights Reserved.</p>
         <p class="mb-0">Directed by Ilmu Komputer UHO 2022</p>
     </footer>
+
     <script src="{% static 'bootstrap/js/bootstrap.bundle.min.js' %}"></script>
-    <script>
-        document.addEventListener('DOMContentLoaded', function () {
-            var toastElList = document.querySelectorAll('.toast');
-            var toastList = [...toastElList].map(function (toastEl) {
-                return new bootstrap.Toast(toastEl, { delay: 5000 });
-            });
-            toastList.forEach(function (toast) {
-                toast.show();
-            });
-        });
-    </script>
 </body>
 </html>
